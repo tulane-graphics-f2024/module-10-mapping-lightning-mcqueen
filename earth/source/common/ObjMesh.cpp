@@ -139,41 +139,64 @@ bool Mesh::loadOBJ(const char * path){
 
 bool Mesh::makeSphere(int steps){
   //TODO: Normals and texture coordinates
-  normals.push_back(vec3(0,0,1));
-  uvs.push_back(vec2(0,0));
+  normals.clear();
+  uvs.clear();
 
   double step_theta = (2*M_PI)/(double)(steps-1);
   double step_phi   = (M_PI)/(double)(steps-1);
   
   std::vector < vec3 > pstrip0;
   std::vector < vec3 > pstrip1;
-  
+  std::vector < vec2 > uvstrip0;
+  std::vector < vec2 > uvstrip1;
+    
   //latitude
   for(unsigned int i=0; i < steps; i++){
     double phi = i*step_phi;
+    double v = phi/M_PI;
     //longitude
     for(unsigned int j=0; j < steps; j++){
       double theta = j*step_theta;
+      double u = theta / (2*M_PI);
       vec3 p = vec3(-cos(theta)*sin(phi), cos(phi), sin(theta)*sin(phi));
+      vec2 uv = vec2(u, v);
+      vec3 normal = normalize(p);
+        
       pstrip1.push_back(p);
+      normals.push_back(normal);
+      uvstrip1.push_back(uv);
     }
     
     for(unsigned int k=0; (k+1) < pstrip0.size(); k++){
       vertices.push_back(pstrip0[k]);
-      
+      normals.push_back(normals[k]);
+      uvs.push_back(uvstrip0[k]);
+        
       vertices.push_back(pstrip1[k]);
-      
+      normals.push_back(normals[k+steps]);
+      uvs.push_back(uvstrip1[k]);
+        
       vertices.push_back(pstrip0[k+1]);
-      
+      normals.push_back(normals[k+1]);
+      uvs.push_back(uvstrip0[k+1]);
+        
       vertices.push_back(pstrip0[k+1]);
-      
+      normals.push_back(normals[k+1]);
+      uvs.push_back(uvstrip0[k+1]);
+    
       vertices.push_back(pstrip1[k]);
-       
+      normals.push_back(normals[k+steps]);
+      uvs.push_back(uvstrip1[k]);
+        
       vertices.push_back(pstrip1[k+1]);
+      normals.push_back(normals[k+1]);
+      uvs.push_back(uvstrip1[k+1]);
     }
     
     pstrip1.swap(pstrip0);
     pstrip1.clear();
+    uvstrip1.swap(uvstrip0);
+    uvstrip1.clear();
   }
   
   return true;
