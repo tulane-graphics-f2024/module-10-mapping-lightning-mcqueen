@@ -27,7 +27,11 @@ void main()
   vec4 diffuse_color = texture(textureEarth, texCoord );
   diffuse_color = Kd*diffuse_color;
   
-  fragColor = ambient + diffuse_color;
+  vec4 cloud_color = texture(textureCloud, texCoord);
+  vec4 cloudBlend = diffuse_color + cloud_color * 0.5;
+  cloudBlend = clamp(cloudBlend, 0.0, 1.0);
+    
+  fragColor = ambient + cloudBlend;
   fragColor = clamp(fragColor, 0.0, 1.0);
   fragColor.a = 1.0;
 }

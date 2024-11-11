@@ -247,6 +247,9 @@ void init(){
   //TODO: ADD NIGHT TEXTURE
 
   //TODO: ADD CLOUD TEXTURE
+  std::string cloud_img = source_path + "/images/cloud_combined.png";
+  loadFreeImageTexture(cloud_img.c_str(),cloud_texture, GL_TEXTURE1);
+  glUniform1i(glGetUniformLocation(program, "textureCloud"), 1);
   
   //TODO: ADD NOISE TEXTURE
 
@@ -402,7 +405,7 @@ int main(void){
     glUniformMatrix4fv( ModelViewLight, 1, GL_TRUE, user_MV*mesh->model_view);
     glUniformMatrix4fv( Projection, 1, GL_TRUE, projection );
     glUniformMatrix4fv( NormalMatrix, 1, GL_TRUE, transpose(invert(user_MV*mesh->model_view)));
-
+    
     glDrawArrays( GL_TRIANGLES, 0, mesh->vertices.size() );
     // ====== End: Draw ======
 
