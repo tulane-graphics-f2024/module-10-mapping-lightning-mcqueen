@@ -239,7 +239,7 @@ void init(){
   glGenTextures( 1, &cloud_texture );
   glGenTextures( 1, &perlin_texture);
   
-  std::string earth_img = source_path + "/images/checkerboard.png";
+  std::string earth_img = source_path + "/images/world.200405.3.png";
   loadFreeImageTexture(earth_img.c_str(), month_texture, GL_TEXTURE0);
     
   glUniform1i( glGetUniformLocation(program, "textureEarth"), 0 );
